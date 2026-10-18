@@ -1,10 +1,11 @@
 ﻿# พิกัดล้อ (wheel-checker) — continuation handoff
 
-**Last updated:** 2026-10-19 (Asia/Bangkok) — HMI Co-Co SideDiagram (full-width)
+**Last updated:** 2026-10-19 (Asia/Bangkok) — v1.0.1 desktop entry polish
 
-Entry page uses a full-width TCMS-style loco schematic (`SideDiagram.qml`): cab noses, hood, B1/B2 bogies, mid fuel tank, selectable axle discs. Do not put the diagram in a narrow side column — it looks squashed.
-
-**Last updated:** 2026-10-19 (Asia/Bangkok) — rename + handoff path
+Entry `SideDiagram` scales to the bay (Cab 1 / Cab 2, mid fuel, no bogie plates).
+Sunk fields stay compact; titles are large on desktop. Undo/Redo beside theme.
+**บันทึก / ดูผล** calls `saveCurrent()` before `page = "result"`.
+Window has no max size ceiling — maximize works.
 
 ## Canonical location
 
@@ -15,6 +16,7 @@ Entry page uses a full-width TCMS-style loco schematic (`SideDiagram.qml`): cab 
 | Product name | **พิกัดล้อ** (`wheel_limits`) |
 | Dynamic exe | `build\wheel_limits_cpp.exe` |
 | Static exe | `build-static\wheel_limits_cpp.exe` |
+| Latest release | **v1.0.1** |
 
 **Do not use** (removed):
 
@@ -38,12 +40,13 @@ Needs Qt at `C:\Users\Naito\Qt` (DLL) or `C:\Users\Naito\QtStatic` (static).
 
 ```text
 src/calc.h          multi-fleet limits + loco bands (namespace wheel)
-src/bridge.*        QML bridge, i18n, prefs, history sort/rows
+src/bridge.*        QML bridge, i18n, prefs, history, undo/redo
 src/main.cpp        Qt Quick entry
-ui/qml/Main.qml     home 2-col, fleet, entry, result, guide, settings
-ui/qml/SideDiagram.qml   Co-Co axle picker
+ui/qml/Main.qml     home 2-col, wizard, entry, result, guide, settings
+ui/qml/SideDiagram.qml   Co-Co axle picker (width-scaled)
+ui/qml/SunkField.qml     compact inset wells
 assets/fleet/       ALS…QSY icons (class codes)
-checks/             check_calc, check_font
+checks/             check_calc, check_undo, check_font
 ```
 
 ## Prefs
@@ -54,10 +57,10 @@ Migrates automatically from legacy `als_wheel` / `srt_wheel` if present.
 ## Recent product notes
 
 - Home: 2-column menu (enter / history / result / guide)
-- History: sort by last edited / created / loco number; tap row → result (no load dropdown)
+- History: sort by last edited / created / loco number; tap row → result
 - Fleet pick: one tap → loco number page
 - Theme: maroon railway (not blue); default dark
-- No GitHub Release yet — work tracked under CHANGELOG Unreleased
+- Release **v1.0.1** on GitHub
 
 ## Continuity rule
 
