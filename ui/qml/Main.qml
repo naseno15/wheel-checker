@@ -703,22 +703,25 @@ Window {
                                 height: (fieldsGrid.height - fieldsGrid.rowSpacing) / 2
 
                                 Column {
-                                    anchors.fill: parent
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.top: parent.top
+                                    anchors.topMargin: 4
                                     spacing: 4
                                     Text {
                                         text: titleKey === "tyre" ? bridge.tyreLabel : root.tr(titleKey)
                                         color: root.ink
                                         font.family: bridge.thaiFontFamily
-                                        font.pixelSize: 13
-                                        font.weight: Font.DemiBold
+                                        font.pixelSize: bridge.largeControls ? 20 : 18
+                                        font.weight: Font.Bold
                                     }
                                     Rectangle {
                                         width: parent.width
                                         height: 22
-                                        radius: 7
-                                        color: bridge.dark ? "#2a1818" : "#f5e8e8"
+                                        radius: 6
+                                        color: bridge.dark ? "#2a1818" : "#f0e4e4"
                                         border.width: 1
-                                        border.color: bridge.dark ? Qt.rgba(196, 92, 92, 0.4) : Qt.rgba(122, 26, 30, 0.3)
+                                        border.color: bridge.dark ? Qt.rgba(196, 92, 92, 0.35) : Qt.rgba(122, 26, 30, 0.25)
                                         Text {
                                             anchors.left: parent.left
                                             anchors.right: parent.right
@@ -729,17 +732,16 @@ Window {
                                             elide: Text.ElideRight
                                             color: bridge.dark ? "#e09090" : "#5c1418"
                                             font.family: bridge.thaiFontFamily
-                                            font.pixelSize: 11
+                                            font.pixelSize: 12
                                             font.weight: Font.DemiBold
                                         }
                                     }
+                                    // Compact fields — natural height, not stretched to fill the cell
                                     Row {
                                         width: parent.width
                                         spacing: 8
-                                        height: parent.height - 48
                                         SunkField {
                                             width: (parent.width - 8) / 2
-                                            height: parent.height
                                             label: root.tr("right")
                                             value: rVal
                                             tone: rTone
@@ -747,7 +749,6 @@ Window {
                                         }
                                         SunkField {
                                             width: (parent.width - 8) / 2
-                                            height: parent.height
                                             label: root.tr("left")
                                             value: lVal
                                             tone: lTone
