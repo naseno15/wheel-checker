@@ -101,7 +101,7 @@ Window {
             spacing: 8
             height: 44
             Column {
-                width: parent.width - themeSeg.width - 8
+                width: parent.width - headerTools.width - 8
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 2
                 Text {
@@ -122,60 +122,121 @@ Window {
                     width: parent.width
                 }
             }
-            Rectangle {
-                id: themeSeg
-                width: 84
-                height: 38
+            Row {
+                id: headerTools
                 anchors.verticalCenter: parent.verticalCenter
-                radius: 19
-                color: bridge.dark ? Qt.rgba(20 / 255, 12 / 255, 12 / 255, 0.7) : Qt.rgba(255, 255, 255, 0.55)
-                border.width: 1
-                border.color: bridge.dark ? Qt.rgba(1, 1, 1, 0.14) : Qt.rgba(255, 255, 255, 0.7)
+                spacing: 8
+                // Undo / Redo next to theme
                 Row {
-                    anchors.centerIn: parent
                     spacing: 4
+                    anchors.verticalCenter: parent.verticalCenter
                     Item {
                         width: 34
-                        height: 30
+                        height: 34
+                        opacity: bridge.canUndo ? 1 : 0.35
                         Rectangle {
                             anchors.fill: parent
-                            radius: 15
-                            visible: !bridge.dark
-                            gradient: Gradient {
-                                GradientStop { position: 0.0; color: "#a83236" }
-                                GradientStop { position: 1.0; color: "#6d191e" }
-                            }
+                            radius: 8
+                            color: bridge.dark ? Qt.rgba(1, 1, 1, 0.06) : Qt.rgba(0, 0, 0, 0.06)
                         }
                         IconLabel {
                             anchors.centerIn: parent
-                            name: "light_mode"
+                            name: "undo"
                             font.pixelSize: 18
-                            color: !bridge.dark ? "#ffffff" : root.muted
+                            color: root.ink
                         }
-                        TapHandler { onTapped: bridge.dark = false }
+                        TapHandler {
+                            enabled: bridge.canUndo
+                            onTapped: bridge.undo()
+                        }
                     }
                     Item {
                         width: 34
-                        height: 30
+                        height: 34
+                        opacity: bridge.canRedo ? 1 : 0.35
                         Rectangle {
                             anchors.fill: parent
-                            radius: 15
-                            visible: bridge.dark
-                            gradient: Gradient {
-                                GradientStop { position: 0.0; color: "#a83236" }
-                                GradientStop { position: 1.0; color: "#6d191e" }
-                            }
+                            radius: 8
+                            color: bridge.dark ? Qt.rgba(1, 1, 1, 0.06) : Qt.rgba(0, 0, 0, 0.06)
                         }
                         IconLabel {
                             anchors.centerIn: parent
-                            name: "dark_mode"
+                            name: "redo"
                             font.pixelSize: 18
-                            color: bridge.dark ? "#ffffff" : root.muted
+                            color: root.ink
                         }
-                        TapHandler { onTapped: bridge.dark = true }
+                        TapHandler {
+                            enabled: bridge.canRedo
+                            onTapped: bridge.redo()
+                        }
+                    }
+                }
+                Rectangle {
+                    id: themeSeg
+                    width: 84
+                    height: 38
+                    anchors.verticalCenter: parent.verticalCenter
+                    radius: 19
+                    color: bridge.dark ? Qt.rgba(20 / 255, 12 / 255, 12 / 255, 0.7) : Qt.rgba(255, 255, 255, 0.55)
+                    border.width: 1
+                    border.color: bridge.dark ? Qt.rgba(1, 1, 1, 0.14) : Qt.rgba(255, 255, 255, 0.7)
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 4
+                        Item {
+                            width: 34
+                            height: 30
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 15
+                                visible: !bridge.dark
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "#a83236" }
+                                    GradientStop { position: 1.0; color: "#6d191e" }
+                                }
+                            }
+                            IconLabel {
+                                anchors.centerIn: parent
+                                name: "light_mode"
+                                font.pixelSize: 18
+                                color: !bridge.dark ? "#ffffff" : root.muted
+                            }
+                            TapHandler { onTapped: bridge.dark = false }
+                        }
+                        Item {
+                            width: 34
+                            height: 30
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: 15
+                                visible: bridge.dark
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "#a83236" }
+                                    GradientStop { position: 1.0; color: "#6d191e" }
+                                }
+                            }
+                            IconLabel {
+                                anchors.centerIn: parent
+                                name: "dark_mode"
+                                font.pixelSize: 18
+                                color: bridge.dark ? "#ffffff" : root.muted
+                            }
+                            TapHandler { onTapped: bridge.dark = true }
+                        }
                     }
                 }
             }
+        }
+
+        Shortcut {
+            sequences: [StandardKey.Undo]
+            enabled: bridge.canUndo
+            onActivated: bridge.undo()
+        }
+        Shortcut {
+            sequences: [StandardKey.Redo]
+            enabled: bridge.canRedo
+            onActivated: bridge.redo()
         }
 
         // Left sidebar � desktop nav (replaces phone bottom tab bar)
