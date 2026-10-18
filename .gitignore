@@ -1,0 +1,44 @@
+# Build trees
+/build/
+/build-static/
+/out/
+/cmake-build-*/
+
+# Compilers / IDE
+*.user
+*.autosave
+.vs/
+.vscode/
+.idea/
+*.suo
+*.obj
+*.o
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.exp
+*.lib
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# Qt / moc / rcc debris
+*_autogen/
+.qt/
+*.qmlc
+*.jsc
+
+# OS / editor junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+*~
+*.swp
+
+# Local logs
+*.log
+run_log.txt
+run_fail.txt
+font_out.txt
