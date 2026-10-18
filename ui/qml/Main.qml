@@ -5,13 +5,11 @@ import QtQuick.Layouts
 
 Window {
     id: root
-    // Desktop landscape window � free resize within the work area.
-    width: Math.min(1180, Screen.desktopAvailableWidth - 48)
-    height: Math.min(740, Screen.desktopAvailableHeight - 48)
-    minimumWidth: 960
-    minimumHeight: 600
-    maximumWidth: Screen.desktopAvailableWidth
-    maximumHeight: Screen.desktopAvailableHeight
+    // Desktop — free resize + maximize (no max cap that blocked fullscreen).
+    width: Math.min(1280, Screen.desktopAvailableWidth - 32)
+    height: Math.min(820, Screen.desktopAvailableHeight - 32)
+    minimumWidth: 900
+    minimumHeight: 560
     // C++ main() centers on the cursor's screen work area, then show()s.
     visible: false
     title: root.tr("app_title")
