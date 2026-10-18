@@ -32,8 +32,8 @@ void centerOnWorkArea(QQuickWindow* win) {
         w = ag.width() - 24;
     if (h > ag.height() - 24)
         h = ag.height() - 24;
-    w = qMax(960, w);
-    h = qMax(600, h);
+    w = qMax(900, w);
+    h = qMax(560, h);
     if (w > ag.width() - 24)
         w = ag.width() - 24;
     if (h > ag.height() - 24)
