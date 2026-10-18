@@ -12,8 +12,10 @@ if (-not (Test-Path (Join-Path $build "build.ninja"))) {
 }
 & $cmake --build $build --target wheel_limits_cpp --parallel $env:NUMBER_OF_PROCESSORS
 & $cmake --build $build --target check_calc --parallel $env:NUMBER_OF_PROCESSORS
+& $cmake --build $build --target check_undo --parallel $env:NUMBER_OF_PROCESSORS
 & $cmake --build $build --target check_font --parallel $env:NUMBER_OF_PROCESSORS
 & (Join-Path $build "check_calc.exe")
+& (Join-Path $build "check_undo.exe")
 & (Join-Path $build "check_font.exe")
 if (-not (Test-Path (Join-Path $build "Qt6Core.dll"))) {
     & "C:\Users\Naito\Qt\bin\windeployqt.exe" --release --compiler-runtime --qmldir (Join-Path $root "ui\qml") (Join-Path $build "wheel_limits_cpp.exe")
