@@ -19,4 +19,5 @@ powershell -NoProfile -File .\fast.ps1
 - [Fleets](docs/FLEETS.md)
 - [Prefs](docs/PREFS.md)
 - [Handoff](HANDOFF.md)
+- [Wizard](docs/WIZARD.md)
 - [Changelog](CHANGELOG.md)
