@@ -646,66 +646,48 @@ Window {
 
                         Row {
                             width: parent.width
-                            spacing: 14
-                            height: Math.min(148, parent.height * 0.28)
-
-                            Column {
-                                width: parent.width * 0.42
-                                spacing: 4
-                                Text {
-                                    width: parent.width
-                                    text: bridge.fleetHeadline
-                                    elide: Text.ElideRight
-                                    color: root.accent
-                                    font.family: bridge.thaiFontFamily
-                                    font.pixelSize: 15
-                                    font.weight: Font.DemiBold
-                                }
-                                Text {
-                                    width: parent.width
-                                    wrapMode: Text.WordWrap
-                                    maximumLineCount: 2
-                                    elide: Text.ElideRight
-                                    text: root.tr("entry_hint")
-                                    color: root.muted
-                                    font.family: bridge.thaiFontFamily
-                                    font.pixelSize: 12
-                                }
-                                SideDiagram {
-                                    width: parent.width
-                                    ink: root.ink
-                                    muted: root.muted
-                                    accent: root.accent
-                                    dark: bridge.dark
-                                    fontFamily: bridge.thaiFontFamily
-                                    fleetLabel: bridge.fleetHeadline
-                                    locoNumber: bridge.locoNumber
-                                    wheel: bridge.wheel
-                                    largeControls: false
-                                    onWheelPicked: (wi) => { bridge.wheel = wi }
-                                }
+                            spacing: 12
+                            Text {
+                                width: parent.width * 0.55
+                                text: bridge.fleetHeadline
+                                elide: Text.ElideRight
+                                color: root.accent
+                                font.family: bridge.thaiFontFamily
+                                font.pixelSize: 15
+                                font.weight: Font.DemiBold
                             }
-
-                            Column {
-                                width: parent.width * 0.58 - 14
-                                anchors.verticalCenter: parent.verticalCenter
-                                spacing: 6
-                                Text {
-                                    width: parent.width
-                                    text: root.tr("diagram_hint")
-                                    wrapMode: Text.WordWrap
-                                    color: root.muted
-                                    font.family: bridge.thaiFontFamily
-                                    font.pixelSize: 12
-                                }
+                            Text {
+                                width: parent.width * 0.45 - 12
+                                horizontalAlignment: Text.AlignRight
+                                text: root.tr("diagram_hint")
+                                elide: Text.ElideRight
+                                color: root.muted
+                                font.family: bridge.thaiFontFamily
+                                font.pixelSize: 12
                             }
                         }
 
-                        // 2�2 field grid � all metrics visible at once
+                        // Full-width HMI schematic — do not squeeze into a side column
+                        SideDiagram {
+                            id: entryDiagram
+                            width: parent.width
+                            ink: root.ink
+                            muted: root.muted
+                            accent: root.accent
+                            dark: bridge.dark
+                            fontFamily: bridge.thaiFontFamily
+                            fleetLabel: bridge.fleetHeadline
+                            locoNumber: bridge.locoNumber
+                            wheel: bridge.wheel
+                            largeControls: bridge.largeControls
+                            onWheelPicked: (wi) => { bridge.wheel = wi }
+                        }
+
+                        // 2×2 field grid under the loco diagram
                         Grid {
                             id: fieldsGrid
                             width: parent.width
-                            height: parent.height - 156
+                            height: Math.max(200, parent.height - entryDiagram.height - 36)
                             columns: 2
                             columnSpacing: 12
                             rowSpacing: 8
