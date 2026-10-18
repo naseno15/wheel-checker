@@ -61,5 +61,8 @@ endif()
 add_executable(check_calc checks/check_calc.cpp)
 target_include_directories(check_calc PRIVATE src)
 
+add_executable(check_undo checks/check_undo.cpp)
+target_include_directories(check_undo PRIVATE src)
+
 add_executable(check_font checks/check_font.cpp)
 target_link_libraries(check_font PRIVATE Qt6::Core Qt6::Gui)
