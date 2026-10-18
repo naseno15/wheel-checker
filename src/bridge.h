@@ -7,6 +7,9 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+#include <array>
+#include <vector>
+
 class Bridge : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool dark READ dark WRITE setDark NOTIFY darkChanged)
@@ -46,6 +49,8 @@ class Bridge : public QObject {
     Q_PROPERTY(QString worstLabel READ worstLabel NOTIFY resultsChanged)
     Q_PROPERTY(QString worstTone READ worstTone NOTIFY resultsChanged)
     Q_PROPERTY(QString saveHint READ saveHint NOTIFY savedChanged)
+    Q_PROPERTY(bool canUndo READ canUndo NOTIFY undoChanged)
+    Q_PROPERTY(bool canRedo READ canRedo NOTIFY undoChanged)
 
 public:
     explicit Bridge(QObject* parent = nullptr);
@@ -101,6 +106,8 @@ public:
     QString worstLabel() const { return worst_label_; }
     QString worstTone() const { return worst_tone_; }
     QString saveHint() const { return save_hint_; }
+    bool canUndo() const { return !undo_.empty(); }
+    bool canRedo() const { return !redo_.empty(); }
 
     Q_INVOKABLE QString t(const QString& key) const;
     Q_INVOKABLE QString glyph(const QString& name) const;
@@ -112,6 +119,8 @@ public:
     Q_INVOKABLE void setField(const QString& key, const QString& text, int wheelIndex = -1);
     Q_INVOKABLE void clearCurrentWheel();
     Q_INVOKABLE void clearAll();
+    Q_INVOKABLE void undo();
+    Q_INVOKABLE void redo();
     Q_INVOKABLE void recompute();
     Q_INVOKABLE bool saveCurrent();
     Q_INVOKABLE void loadRecord(int index);
@@ -139,8 +148,10 @@ signals:
     void fieldsChanged();
     void savedChanged();
     void historyChanged();
+    void undoChanged();
 
 private:
+    using WheelSnap = std::array<wheel::Wheel, 6>;
     QString formatWhen(const QString& iso) const;
     int wheelIndex() const;
     wheel::Side& sideRef(bool right);
@@ -153,11 +164,14 @@ private:
     QString levelLabel(wheel::Level lv) const;
     wheel::Limits currentLimits() const { return wheel::limits_for(fleet_); }
     void refreshLocoCheck();
+    void pushUndo();
+    void closeFieldEdit();
 
     bool dark_ = true;  // maroon railway-on-black default
     bool inches_ = false;
     bool large_ = true;
     bool fleet_picked_ = false;
+    bool field_edit_open_ = false;
     QString lang_ = QStringLiteral("th");
     QString page_ = QStringLiteral("home");
     wheel::Fleet fleet_ = wheel::Fleet::Als;
@@ -171,6 +185,8 @@ private:
     int bogie_ = 0;
     int wheel_ = 0;
     std::array<wheel::Wheel, 6> wheels_{};
+    std::vector<WheelSnap> undo_;
+    std::vector<WheelSnap> redo_;
     QVariantList result_rows_;
     QVariantList saved_;
     QString history_sort_ = QStringLiteral("modified");  // modified | created | loco
