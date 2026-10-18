@@ -130,7 +130,7 @@ const TrPair kTr[] = {
     {"bogie", "แคร่", "Bogie"},
     {"wheel", "ล้อ", "Wheel"},
     {"entry_hint", "หัวช่อง = ค่าพิกัด · สีช่อง = สถานะ (เขียว/เหลือง/แดง)", "Header = limits · field colour = status"},
-    {"diagram_hint", "แตะล้อใต้โครงรถเพื่อเลือกเพลา", "Tap a wheel under the frame to pick an axle"},
+    {"diagram_hint", "แตะล้อ 1–6 บนแผนภาพรถจักรเพื่อเลือกเพลา", "Tap axle 1–6 on the loco diagram to select"},
     {"fuel_tank", "ถังน้ำมัน", "Fuel"},
     {"tyre", "ปลอกล้อ", "Tyre thickness"},
     {"tread", "พื้นล้อ", "Tread wear"},
