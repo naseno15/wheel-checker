@@ -865,23 +865,28 @@ Window {
                             spacing: 10
                             height: parent.height
                             RaiseButton {
-                                width: 150
+                                width: 168
                                 height: parent.height
                                 label: root.tr("see_result")
-                                iconName: "fact_check"
-                                onClicked: bridge.page = "result"
+                                iconName: "save"
+                                onClicked: {
+                                    bridge.saveCurrent()
+                                    bridge.page = "result"
+                                }
                             }
                             RaiseButton {
                                 width: 180
                                 height: parent.height
                                 label: bridge.wheel >= 5 ? root.tr("see_result") : root.tr("next_axle")
-                                iconName: bridge.wheel >= 5 ? "fact_check" : "chevron_right"
+                                iconName: bridge.wheel >= 5 ? "save" : "chevron_right"
                                 accent: true
                                 onClicked: {
-                                    if (bridge.wheel < 5)
+                                    if (bridge.wheel < 5) {
                                         bridge.wheel = bridge.wheel + 1
-                                    else
+                                    } else {
+                                        bridge.saveCurrent()
                                         bridge.page = "result"
+                                    }
                                 }
                             }
                         }
