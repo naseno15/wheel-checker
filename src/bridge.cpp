@@ -66,6 +66,8 @@ const Glyph kGlyphs[] = {
     {"info", 0xe88e},
     {"clear", 0xe14c},
     {"save", 0xe161},
+    {"undo", 0xe166},
+    {"redo", 0xe15a},
     {"chevron_right", 0xe5cc},
     {"arrow_back", 0xe5c4},
     {"expand_more", 0xe5cf},
@@ -144,8 +146,10 @@ const TrPair kTr[] = {
     {"left", "ซ้าย", "Left"},
     {"clear_wheel", "ล้างล้อนี้", "Clear wheel"},
     {"next_axle", "ไปเพลาถัดไป", "Next axle"},
-    {"see_result", "ดูผลสรุป", "See summary"},
+    {"see_result", "บันทึก / ดูผล", "Save / Summary"},
     {"summary", "ผลสรุป", "Summary"},
+    {"undo", "เลิกทำ", "Undo"},
+    {"redo", "ทำซ้ำ", "Redo"},
     {"overall", "สถานะรวม", "Overall"},
     {"back_entry", "กลับไปกรอก", "Back to entry"},
     {"save_result", "บันทึกผล", "Save result"},
@@ -317,6 +321,7 @@ void Bridge::setLang(const QString& v) {
 
 void Bridge::setPage(const QString& p) {
     if (page_ == p) return;
+    closeFieldEdit();
     page_ = p;
     emit pageChanged();
 }
@@ -332,12 +337,16 @@ void Bridge::setFleetCode(const QString& code) {
     guide_fleet_ = f;
     refreshLocoCheck();
     if (changed) {
+        closeFieldEdit();
         wheels_ = {};
+        undo_.clear();
+        redo_.clear();
         bogie_ = 0;
         wheel_ = 0;
         emit bogieChanged();
         emit wheelChanged();
         emit fieldsChanged();
+        emit undoChanged();
     }
     emit fleetChanged();
     emit locoNumberChanged();
@@ -506,6 +515,7 @@ void Bridge::setBogie(int v) {
 void Bridge::setWheel(int v) {
     v = v < 0 ? 0 : (v > 5 ? 5 : v);
     if (wheel_ == v) return;
+    closeFieldEdit();
     wheel_ = v;
     bogie_ = wheel_ < 3 ? 0 : 1;
     emit wheelChanged();
@@ -621,6 +631,18 @@ QVariantMap Bridge::fieldLimitHints() const {
     return m;
 }
 
+void Bridge::pushUndo() {
+    undo_.push_back(wheels_);
+    while (undo_.size() > 40)
+        undo_.erase(undo_.begin());
+    redo_.clear();
+    emit undoChanged();
+}
+
+void Bridge::closeFieldEdit() {
+    field_edit_open_ = false;
+}
+
 void Bridge::setField(const QString& key, const QString& text, int wheelIndex) {
     const int wi = wheelIndex < 0 ? wheel_ : wheelIndex;
     if (wi < 0 || wi > 5) return;
@@ -644,6 +666,11 @@ void Bridge::setField(const QString& key, const QString& text, int wheelIndex) {
     } else {
         return;
     }
+    // Snapshot once per typing burst so clear/typo can Undo.
+    if (!field_edit_open_) {
+        pushUndo();
+        field_edit_open_ = true;
+    }
     if (trimmed.isEmpty()) {
         *has = false;
         *val = 0;
@@ -664,13 +691,39 @@ void Bridge::setField(const QString& key, const QString& text, int wheelIndex) {
 }
 
 void Bridge::clearCurrentWheel() {
+    closeFieldEdit();
+    pushUndo();
     wheels_[static_cast<size_t>(wheel_)] = {};
     emit fieldsChanged();
     recompute();
 }
 
 void Bridge::clearAll() {
+    closeFieldEdit();
+    pushUndo();
     wheels_ = {};
+    emit fieldsChanged();
+    recompute();
+}
+
+void Bridge::undo() {
+    if (undo_.empty()) return;
+    closeFieldEdit();
+    redo_.push_back(wheels_);
+    wheels_ = undo_.back();
+    undo_.pop_back();
+    emit undoChanged();
+    emit fieldsChanged();
+    recompute();
+}
+
+void Bridge::redo() {
+    if (redo_.empty()) return;
+    closeFieldEdit();
+    undo_.push_back(wheels_);
+    wheels_ = redo_.back();
+    redo_.pop_back();
+    emit undoChanged();
     emit fieldsChanged();
     recompute();
 }
