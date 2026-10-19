@@ -599,6 +599,28 @@ QVariantMap Bridge::currentFieldTones() const {
     return m;
 }
 
+QStringList Bridge::wheelTones() const {
+    // Per-axle worst of L/R wear + same-axle tyre Δ — empty / ok / warn / bad.
+    QStringList out;
+    out.reserve(6);
+    const wheel::Limits lim = currentLimits();
+    for (int i = 0; i < 6; ++i) {
+        const wheel::Wheel& w = wheels_[static_cast<size_t>(i)];
+        const wheel::SideStatus rs = wheel::eval_side(w.right, lim);
+        const wheel::SideStatus ls = wheel::eval_side(w.left, lim);
+        wheel::Level lv = wheel::Level::Empty;
+        for (wheel::Level x : {rs.tyre, rs.tread, rs.flange, rs.root,
+                               ls.tyre, ls.tread, ls.flange, ls.root}) {
+            if (x != wheel::Level::Empty)
+                lv = wheel::worse(lv, x);
+        }
+        if (w.right.has_tyre && w.left.has_tyre)
+            lv = wheel::worse(lv, wheel::diff_level(std::abs(w.right.tyre - w.left.tyre), lim.axle_mm));
+        out.push_back(tone_of(lv));
+    }
+    return out;
+}
+
 QVariantMap Bridge::fieldLimitHints() const {
     const wheel::Limits lim = currentLimits();
     const QString u = unitLabel();
