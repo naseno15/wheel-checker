@@ -1,9 +1,10 @@
 ﻿# พิกัดล้อ (wheel-checker) — continuation handoff
 
-**Last updated:** 2026-10-19 (Asia/Bangkok) — v1.0.1 desktop entry polish
+**Last updated:** 2026-10-19 (Asia/Bangkok) — v1.0.2 axle status colours
 
-Entry `SideDiagram` scales to the bay (Cab 1 / Cab 2, mid fuel, no bogie plates).
-Sunk fields stay compact; titles are large on desktop. Undo/Redo beside theme.
+Entry `SideDiagram` ~80% of bay (Cab 1 / Cab 2, mid fuel, no hub dot).
+Axle discs: green / yellow / red from `bridge.wheelTones`.
+Sunk fields compact; titles large on desktop. Undo/Redo beside theme.
 **บันทึก / ดูผล** calls `saveCurrent()` before `page = "result"`.
 Window has no max size ceiling — maximize works.
 
@@ -16,7 +17,7 @@ Window has no max size ceiling — maximize works.
 | Product name | **พิกัดล้อ** (`wheel_limits`) |
 | Dynamic exe | `build\wheel_limits_cpp.exe` |
 | Static exe | `build-static\wheel_limits_cpp.exe` |
-| Latest release | **v1.0.1** |
+| Latest release | **v1.0.2** |
 
 **Do not use** (removed):
 
@@ -60,7 +61,7 @@ Migrates automatically from legacy `als_wheel` / `srt_wheel` if present.
 - History: sort by last edited / created / loco number; tap row → result
 - Fleet pick: one tap → loco number page
 - Theme: maroon railway (not blue); default dark
-- Release **v1.0.1** on GitHub
+- Release **v1.0.2** on GitHub
 
 ## Continuity rule
 
