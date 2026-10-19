@@ -14,21 +14,21 @@ Item {
     property bool largeControls: false
     signal wheelPicked(int wi)
 
-    readonly property int pad: 14
-    readonly property int idW: Math.max(120, Math.min(168, Math.round(width * 0.13)))
-    readonly property int cabH: 18
-    // Fill the diagram bay — derive wheel size from leftover width
-    readonly property int availW: Math.max(280, width - idW - pad * 2 - 12)
-    readonly property int targetPick: Math.round(availW * 0.94)
-    readonly property int midGap: Math.max(48, Math.round(targetPick * 0.13))
-    readonly property int axGap: Math.max(8, Math.round(targetPick * 0.018))
+    readonly property int pad: 12
+    readonly property int idW: Math.max(112, Math.min(148, Math.round(width * 0.12)))
+    readonly property int cabH: 16
+    // ~80% of bay — was 94% and felt oversized
+    readonly property int availW: Math.max(260, width - idW - pad * 2 - 12)
+    readonly property int targetPick: Math.round(availW * 0.80)
+    readonly property int midGap: Math.max(40, Math.round(targetPick * 0.12))
+    readonly property int axGap: Math.max(6, Math.round(targetPick * 0.016))
     // pickW = 6*axW + 4*axGap + midGap
-    readonly property int axW: Math.max(40, Math.floor((targetPick - midGap - 4 * axGap) / 6))
-    readonly property int wheelR: Math.max(18, Math.floor((axW - 4) / 2))
+    readonly property int axW: Math.max(34, Math.floor((targetPick - midGap - 4 * axGap) / 6))
+    readonly property int wheelR: Math.max(16, Math.floor((axW - 4) / 2))
     readonly property int pickW: axW * 6 + axGap * 4 + midGap
-    readonly property int bodyH: Math.max(78, Math.round(wheelR * 2.9))
-    readonly property int underH: wheelR * 2 + 16
-    height: pad * 2 + cabH + bodyH + underH + 18
+    readonly property int bodyH: Math.max(56, Math.round(wheelR * 2.45))
+    readonly property int underH: wheelR * 2 + 12
+    height: pad * 2 + cabH + bodyH + underH + 14
 
     readonly property color panelBg: dark ? "#161010" : "#f4ecec"
     readonly property color bodyFill: dark ? "#3a2828" : "#d2bcbc"
