@@ -12,6 +12,8 @@ Item {
     property string locoNumber: ""
     property int wheel: 0
     property bool largeControls: false
+    // 6× "empty"|"ok"|"warn"|"bad" — fill colour only
+    property var tones: ["empty", "empty", "empty", "empty", "empty", "empty"]
     signal wheelPicked(int wi)
 
     readonly property int pad: 12
@@ -41,6 +43,23 @@ Item {
         id: ax
         property int wi: 0
         property bool on: false
+        readonly property string tone: {
+            const t = d.tones
+            if (!t || wi < 0 || wi >= t.length) return "empty"
+            return t[wi] || "empty"
+        }
+        readonly property color fill: {
+            if (ax.tone === "ok") return d.dark ? "#1f9a5c" : "#2ecc71"
+            if (ax.tone === "warn") return d.dark ? "#d4a017" : "#f1c40f"
+            if (ax.tone === "bad") return d.dark ? "#c0392b" : "#e74c3c"
+            return ax.on ? d.accent : (d.dark ? "#1e1414" : "#ffffff")
+        }
+        readonly property color numColor: {
+            if (ax.tone === "warn" && !d.dark) return "#1a1212"
+            if (ax.tone === "ok" || ax.tone === "bad" || ax.tone === "warn" || ax.on)
+                return "#ffffff"
+            return d.ink
+        }
         width: d.axW
         height: d.underH
 
@@ -50,13 +69,13 @@ Item {
             radius: d.wheelR
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            color: ax.on ? d.accent : (d.dark ? "#1e1414" : "#ffffff")
-            border.width: ax.on ? 2.5 : 2
-            border.color: ax.on ? "#ffffff" : d.accent
+            color: ax.fill
+            border.width: ax.on ? 3 : 2
+            border.color: ax.on ? "#ffffff" : (ax.tone === "empty" ? d.accent : Qt.rgba(0, 0, 0, 0.35))
             Text {
                 anchors.centerIn: parent
                 text: "" + (ax.wi + 1)
-                color: ax.on ? "#ffffff" : d.ink
+                color: ax.numColor
                 font.family: d.fontFamily
                 font.pixelSize: Math.max(12, Math.round(d.wheelR * 0.9))
                 font.weight: Font.Bold
