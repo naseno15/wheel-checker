@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 #include <QVariantList>
 #include <QVariantMap>
 
@@ -48,6 +49,7 @@ class Bridge : public QObject {
     Q_PROPERTY(QString historySort READ historySort WRITE setHistorySort NOTIFY historyChanged)
     Q_PROPERTY(QString worstLabel READ worstLabel NOTIFY resultsChanged)
     Q_PROPERTY(QString worstTone READ worstTone NOTIFY resultsChanged)
+    Q_PROPERTY(QStringList wheelTones READ wheelTones NOTIFY resultsChanged)
     Q_PROPERTY(QString saveHint READ saveHint NOTIFY savedChanged)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY undoChanged)
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY undoChanged)
@@ -105,6 +107,7 @@ public:
     void setHistorySort(const QString& v);
     QString worstLabel() const { return worst_label_; }
     QString worstTone() const { return worst_tone_; }
+    QStringList wheelTones() const;
     QString saveHint() const { return save_hint_; }
     bool canUndo() const { return !undo_.empty(); }
     bool canRedo() const { return !redo_.empty(); }
