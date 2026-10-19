@@ -53,19 +53,12 @@ Item {
             color: ax.on ? d.accent : (d.dark ? "#1e1414" : "#ffffff")
             border.width: ax.on ? 2.5 : 2
             border.color: ax.on ? "#ffffff" : d.accent
-            Rectangle {
-                width: Math.max(8, d.wheelR * 0.48)
-                height: width
-                radius: width / 2
-                anchors.centerIn: parent
-                color: ax.on ? Qt.rgba(1, 1, 1, 0.35) : (d.dark ? "#3a2828" : "#d0bcbc")
-            }
             Text {
                 anchors.centerIn: parent
                 text: "" + (ax.wi + 1)
                 color: ax.on ? "#ffffff" : d.ink
                 font.family: d.fontFamily
-                font.pixelSize: Math.max(12, Math.round(d.wheelR * 0.85))
+                font.pixelSize: Math.max(12, Math.round(d.wheelR * 0.9))
                 font.weight: Font.Bold
             }
         }
