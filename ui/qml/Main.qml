@@ -739,6 +739,7 @@ Window {
                             locoNumber: bridge.locoNumber
                             wheel: bridge.wheel
                             largeControls: bridge.largeControls
+                            tones: bridge.wheelTones
                             onWheelPicked: (wi) => { bridge.wheel = wi }
                         }
 
