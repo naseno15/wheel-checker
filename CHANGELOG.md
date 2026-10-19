@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## v1.0.2 — 2026-10-19
+
+- Co-Co diagram shrunk to ~80% of bay (less oversized)
+- Axle hub centre-dot removed so numbers stay clear
+- Axle discs show green / yellow / red for overall wheel status
+- `bridge.wheelTones` drives diagram fill colours
+
 ## v1.0.1 — 2026-10-19
 
 - Compact sunk entry wells (inset, dark wells off pure black)
